@@ -1,15 +1,20 @@
-FROM docker.io/library/debian:sid-20210208-slim
-ARG HUGO_VERSION='0.80.0'
+FROM archlinux:base-devel-20210425.0.20608
 
-RUN apt-get update && \
-    apt-get install wget golang-go -y && \
-    adduser --system --uid 1000 --home /src hugo && \
+ARG HUGO_VERSION='0.83.1'
+ARG UID='1000'
+ARG HUGO_HOME='/src'
+
+RUN pacman -Sy --noconfirm wget git go && \
+    useradd --system --uid $UID --home-dir $HUGO_HOME hugo && \
     mkdir /hugo-src && \
-    cd  /hugo-src && \
+    cd /hugo-src && \
     wget https://github.com/gohugoio/hugo/archive/v$HUGO_VERSION.tar.gz && \
     tar -xvf v$HUGO_VERSION.tar.gz && \
     cd hugo-$HUGO_VERSION && \
     go install
+
+ENV PATH "${PATH}:/root/go/bin"
+
 
 WORKDIR /src
 EXPOSE 1313
