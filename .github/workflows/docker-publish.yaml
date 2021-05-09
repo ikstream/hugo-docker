@@ -20,8 +20,14 @@ jobs:
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
+      - name: Get Hugo version
+        id: version
+        run: echo "::set-output name=version::$(awk -F = '/HUGO_VERSION/{print$2}' Dockerfile | tr -d "'")"
+
       - name: Build image
-        run: docker build . --file Dockerfile --tag docker.io/ikstream/$IMAGE_NAME-${{ steps.date.outputs.date }}:latest
+        run: |
+          docker build . --file Dockerfile --tag docker.io/ikstream/$IMAGE_NAME:${{ steps.version.outputs.version}}-${{ steps.date.outputs.date }}
+          docker tag docker.io/ikstream/$IMAGE_NAME:${{ steps.version.outputs.version}}-${{ steps.date.outputs.date }} docker.io/$IMAGE_NAME:latest
 
       - name: Log into registry
         uses: docker/login-action@v1
@@ -31,4 +37,5 @@ jobs:
 
       - name: Push image
         run: |
-          docker push docker.io/ikstream/$IMAGE_NAME-${{ steps.date.outputs.date }}:latest
+          docker push docker.io/ikstream/$IMAGE_NAME:latest
+          docker push docker.io/ikstream/$IMAGE_NAME:${{ steps.version.outputs.version}}-${{ steps.date.outputs.date }}
