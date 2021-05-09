@@ -27,7 +27,7 @@ jobs:
       - name: Build image
         run: |
           docker build . --file Dockerfile --tag docker.io/ikstream/$IMAGE_NAME:${{ steps.version.outputs.version}}-${{ steps.date.outputs.date }}
-          docker tag docker.io/ikstream/$IMAGE_NAME:${{ steps.version.outputs.version}}-${{ steps.date.outputs.date }} docker.io/$IMAGE_NAME:latest
+          docker tag docker.io/ikstream/$IMAGE_NAME:${{ steps.version.outputs.version}}-${{ steps.date.outputs.date }} docker.io/ikstream/$IMAGE_NAME:latest
 
       - name: Log into registry
         uses: docker/login-action@v1
