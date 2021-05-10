@@ -25,7 +25,7 @@ jobs:
         run: echo "::set-output name=version::$(awk -F = '/HUGO_VERSION/{print$2}' Dockerfile | tr -d "'")"
 
       - name: Build image
-        run: run: |
+        run: |
           docker build . --file Dockerfile --tag docker.io/ikstream/$IMAGE_NAME:${{ steps.version.outputs.version}}-${{ steps.date.outputs.date }}
           docker tag docker.io/ikstream/$IMAGE_NAME:${{ steps.version.outputs.version}}-${{ steps.date.outputs.date }} docker.io/ikstream/$IMAGE_NAME:latest
 
