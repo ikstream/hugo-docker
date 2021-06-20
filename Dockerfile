@@ -1,15 +1,15 @@
-FROM archlinux:base-devel-20210425.0.20608
+FROM golang:1.16.4-alpine3.13
 
-ARG HUGO_VERSION='0.83.1'
+ARG HUGO_VERSION=$(curl https://api.github.com/repos/gohugoio/hugo/releases/latest -s | jq .name -r)
 ARG UID='1000'
 ARG HUGO_HOME='/src'
 
-RUN pacman -Sy --noconfirm wget git go && \
+RUN apk update && apk add wget git shadow && \
     useradd --system --uid $UID --home-dir $HUGO_HOME hugo && \
     mkdir /hugo-src && \
     cd /hugo-src && \
-    wget https://github.com/gohugoio/hugo/archive/v$HUGO_VERSION.tar.gz && \
-    tar -xvf v$HUGO_VERSION.tar.gz && \
+    wget https://github.com/gohugoio/hugo/archive/$HUGO_VERSION.tar.gz && \
+    tar -xvf $HUGO_VERSION.tar.gz && \
     cd hugo-$HUGO_VERSION && \
     go install
 

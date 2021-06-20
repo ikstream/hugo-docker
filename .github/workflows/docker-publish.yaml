@@ -15,14 +15,14 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
-      
+
       - name: Get current date
         id: date
         run: echo "::set-output name=date::$(date +'%Y-%m-%d')"
 
       - name: Get Hugo version
         id: version
-        run: echo "::set-output name=version::$(awk -F = '/HUGO_VERSION/{print$2}' Dockerfile | tr -d "'")"
+        run: echo "::set-output name=version::$(curl https://api.github.com/repos/gohugoio/hugo/releases/latest -s | jq .name -r | cut -c2-)"
 
       - name: Build image
         run: |
