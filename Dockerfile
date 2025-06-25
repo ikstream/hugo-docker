@@ -1,4 +1,4 @@
-FROM golang:stretch
+FROM golang:tip-bookworm
 
 ARG UID='1000'
 ARG HUGO_HOME='/src'
@@ -8,7 +8,7 @@ RUN apt-get update --yes && apt-get install --yes wget git curl jq gcc && \
     useradd --system --uid $UID --home-dir $HUGO_HOME hugo && \
     mkdir /hugo-src && \
     cd /hugo-src && \
-    wget https://github.com/gohugoio/hugo/archive/v$hugo_version.tar.gz && \
+    wget https://github.com/gohugoio/hugo/archive/refs/tags/v$hugo_version.tar.gz && \
     tar -xvf v$hugo_version.tar.gz && \
     cd hugo-$hugo_version && \
     CGO_ENABLED=1 go install --tags extended
